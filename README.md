@@ -1,81 +1,119 @@
-# Welcome
-The front-end framework for developing projects on the web in Windows Metro Style, created and supported by Sergey Pimenov (aka olton) with the massive support and involvement of community. Metro UI CSS developed with the advice of Microsoft to build the user interface and include: general styles, grid, layouts, typography, 20+ components, 300+ built-in icons. Metro UI CSS build with {LESS}. Metro UI CSS is open source and has MIT licensing model.
+<p align="center">
+  <a href="https://metroui.org.ua/v4/">
+    <img src="https://metroui.org.ua/images/logo4.png" alt="">
+  </a>
+
+  <h3 align="center">Metro 4 Components Library</h3>
+</p>
+
+<p align="center">
+    Sleek, intuitive, and powerful front-end framework for faster and easier web development.
+ Build responsive, mobile-first projects on the web with the first front-end component library in Metro Style.
+    <br>
+    <a href="https://metroui.org.ua/"><strong>Explore Metro 4 docs »</strong></a>
+</p>
+
+<p align="center">
+Metro 4 is an MIT-licensed open source project. 
+It's an independent project with its ongoing development made possible entirely thanks to the support by these
+<br>
+<a href="https://github.com/olton/Metro-UI-CSS/blob/master/BACKERS.md"><strong>awesome Backers</strong></a>.
+</p>
+<a href="https://www.patreon.com/metroui">
+	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
+</a>
+<br>
+<hr>
  
-## Current Version 3.0.17
+## Current Version 4.2.48
 
-### Install with bower
- bower install metro
- bower install metro-dist
+### Status
+[![Build Status](https://travis-ci.org/olton/Metro-UI-CSS.svg?branch=master)](https://travis-ci.org/olton/Metro-UI-CSS)
+[![dependencies Status](https://david-dm.org/olton/Metro-UI-CSS/status.svg)](https://david-dm.org/olton/Metro-UI-CSS)
+[![devDependencies Status](https://david-dm.org/olton/Metro-UI-CSS/dev-status.svg)](https://david-dm.org/olton/Metro-UI-CSS?type=dev)
+[![CSS gzip size](http://img.badgesize.io/olton/Metro-UI-CSS/master/build/css/metro-all.min.css?compression=gzip&label=CSS+gzip)](https://github.com/olton/Metro-UI-CSS/blob/master/build/css/metro-all.min.css)
+[![JS gzip size](http://img.badgesize.io/olton/Metro-UI-CSS/master/build/js/metro.min.js?compression=gzip&label=JS+gzip)](https://github.com/olton/Metro-UI-CSS/blob/master/build/js/metro.min.js)
+[![Icons gzip size](http://img.badgesize.io/olton/Metro-UI-CSS/master/build/mif/metro.woff?compression=gzip&label=Icons+gzip)](https://github.com/olton/Metro-UI-CSS/tree/master/build/mif)
+![GitHub release](https://img.shields.io/github/release/olton/Metro-UI-CSS.svg?color=darklime)
+[![npm version](https://badge.fury.io/js/metro4.svg)](https://badge.fury.io/js/metro4)
+![Nuget](https://img.shields.io/nuget/v/Metro4.svg?color=darklime)
+![Website](https://img.shields.io/website/https/metroui.org.ua.svg)
 
-### Install with npm
- npm install metro-dist
+###  Info
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)](https://github.com/olton/Metro-UI-CSS/blob/master/LICENSE)
+![GitHub issues](https://img.shields.io/github/issues-raw/olton/Metro-UI-CSS.svg)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/olton/Metro-UI-CSS.svg)
 
-metro-dist repository contains only main framework files: css, js and font
+### Donation
 
-### Install with nuget
-Install-Package Metro.UI.CSS
+![Donations on Patreon](https://img.shields.io/badge/Patreon-$119-red.svg)
+![Donations on Open Collective](https://img.shields.io/badge/OpenCollective-$0-darklime.svg)
 
-### Public CDN
+### Community
 
-#### Master branch
-#### CSS
--  http://cdn.metroui.org.ua/css/metro.min.css
--  http://cdn.metroui.org.ua/css/metro-colors.min.css 
--  http://cdn.metroui.org.ua/css/metro-schemes.min.css 
--  http://cdn.metroui.org.ua/css/metro-icons.min.css 
--  http://cdn.metroui.org.ua/css/metro-responsive.min.css 
--  http://cdn.metroui.org.ua/css/metro-rtl.min.css 
--  http://cdn.metroui.org.ua/css/metro-font-cdn.css - this required for use icons from cdn
-
-#### JS
-- http://cdn.metroui.org.ua/js/metro.min.js
-
-#### Develop branch
-##### CSS
-
- - https://cdn.rawgit.com/olton/Metro-UI-CSS/develop/build/css/metro.min.css
- - https://cdn.rawgit.com/olton/Metro-UI-CSS/develop/build/css/metro-responsive.min.css 
- - https://cdn.rawgit.com/olton/Metro-UI-CSS/develop/build/css/metro-schemes.min.css
- - https://cdn.rawgit.com/olton/Metro-UI-CSS/develop/build/css/metro-rtl.min.css
- - https://cdn.rawgit.com/olton/Metro-UI-CSS/develop/build/css/metro-icons.min.css
- 
-##### JS
-
- - https://cdn.rawgit.com/olton/Metro-UI-CSS/develop/build/js/metro.min.js
+[![Join the chat at https://discord.gg/NydRab3](https://img.shields.io/badge/chat-on%20discord-brightgreen.svg?style=flat)](https://discord.gg/NydRab3)
+[![Join the chat at https://gitter.im/metro4/Lobby](https://badges.gitter.im/metro4/Lobby.svg)](https://gitter.im/metro4/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the forum at https://forum.metroui.org.ua](https://img.shields.io/badge/metro-forum-orange.svg)](https://forum.metroui.org.ua)
 
 
-### Whats new in 3.0
-+ compatible with AngularJS and RequireJS
-+ full code refactoring
-+ declarative approach to the definition of components
-+ framework itself monitors components, pressure via ajax
-+ create cool page without knowledge of javascript
+### Docs
 
- Documentation and Demo: [metroui.org.ua](http://metroui.org.ua/).   
- Documentation and Demo for V2: [metroui.org.ua/v2](http://metroui.org.ua/v2).   
- Community Forum: [forum.metroui.org.ua](http://forum.metroui.org.ua).  
+ Documentation and Demo: [metroui.org.ua](https://metroui.org.ua/)   
+
+### Releases
+
+Metro 4 releases frequently. I Am create release when there are significant bug fixes, new APIs or components.
+The usual frequency of release of the new version is one week on Sundays.
+
+### LTS
+**Long term support** of older versions of Metro 4 does not currently exist. 
+If your current version of Metro 4 works for you, you can stay on it for as long as you'd like. 
+If you want to make use of new features as they come in you should upgrade to a newer version.
 
 ### Credits
-- Metro UI CSS is a Microsoft BizSpark Startup.
 - Styles created using the [less](http://lesscss.org) preprocessor by  [Alexis Sellier](https://github.com/cloudhead)
 - preCode by Leon Sorokin [preCode](https://github.com/leeoniya/preCode.js)
 - easing functions by George McGinley Smith [easing](http://gsgd.co.uk/sandbox/jquery/easing/)
-- mousewheel.js by Brandon Aaron [mousewheel](http://brandonaaron.net)
-- jQuery Core and jQuery Widget Factory by jQuery [jquery](https://jquery.com/)
-- All who have I picked up something good
+- strftime by Tom Doan [strftime](https://github.com/thdoan/strftime)
+- jQuery Core [jquery](https://jquery.com/)
+- function b64toBlob by [Jeremy Banks](http://stackoverflow.com/users/1114/jeremy-banks)
+- Date.getWeek by [Nick Baicoianu](http://www.epoch-calendar.com)
+- Swipe component based on [Matt Bryson](https://github.com/mattbryson/TouchSwipe-Jquery-Plugin)  TouchSwipe plugin
+- All who brought something good 
 
 ### Browser Compatibility
-IE9+, Chrome, Firefox, Opera, Safari
+![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![IE](https://raw.github.com/alrra/browser-logos/master/src/archive/internet-explorer_9-11/internet-explorer_9-11_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png)
+--- | --- | --- | --- | --- | --- |
+Latest ✔ | Latest ✔ | Latest ✔ | 11+ ✔ | 9.1+ ✔ | Latest ✔ |
 
-# License
-Metro UI CSS has [MIT License](http://metroui.org.ua/license.html)
+### Cross-browser Testing
+Cross-browser Testing Platform and Open Source Provided by [Sauce Labs](https://saucelabs.com).
+Sauce Labs ensures your favorite mobile apps and websites work flawlessly on every browser, operating system, and device.
+<p>
+<a href="https://saucelabs.com"><img src="https://metroui.org.ua/images/Sauce-Labs_Horiz_Red-Grey_RGB_200x28.png" width="200"></a>
+</p>
 
-## Old version
-Metro UI CSS 2.x you can find in a branch [metrouicss-2x](https://github.com/olton/Metro-UI-CSS/tree/metrouicss-2x)     
-Metro UI CSS 0.95 you can find in a branch [metrouicss-0.95](https://github.com/olton/Metro-UI-CSS/tree/metrouicss-0.95) 
+Cross-browser Testing Platform Provided by [BrowserStack](https://www.browserstack.com/).
+Seamless experience by testing on 2000+ real devices and browsers.
+<p>
+<a href="https://www.browserstack.com/"><img src="https://metroui.org.ua/images/Browserstack-logo.svg" width="200"></a>
+</p>
+
+### License
+Metro 4 has [MIT License](https://github.com/olton/Metro-UI-CSS/blob/master/LICENSE)
+
+### Old version
+Metro UI CSS 3.x you can find in a repo [Metro-UI-CSS-3](https://github.com/olton/Metro-UI-CSS-3)     
+Metro UI CSS 2.x you can find in a repo [Metro-UI-CSS-2](https://github.com/olton/Metro-UI-CSS-2)     
+Metro UI CSS 0.x you can find in a repo [Metro-UI-CSS-095](https://github.com/olton/Metro-UI-CSS-095) 
+
+ Documentation and Demo for V3: [metroui.org.ua/v3](https://metroui.org.ua/v3/).   
+ Documentation and Demo for V2: [metroui.org.ua/v2](https://metroui.org.ua/v2/).   
+ Documentation and Demo for V0: [metroui.org.ua/v0](https://metroui.org.ua/v0/).   
 
 ### Thanks
 Thanks to all. Special thanks to all those who financially supported the project.    
-    
-        
-        
+
+### Testers
+Thanks to all who a [testing](https://github.com/olton/Metro-UI-CSS/blob/master/TESTERS.md) a project. 
+

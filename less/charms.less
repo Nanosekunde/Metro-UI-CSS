@@ -1,79 +1,131 @@
-@import (once) "vars";
-@import (once) "utils";
-@import (once) "mixins";
+@import (once) "include/vars";
+@import (once) "include/mixins";
 
-.charm {
-	display: block;
-	position: fixed;
-	z-index: @zindexCharms;
-	background: @dark;
-	color: @grayLighter;
-	padding: .625rem;
-    .enableGPU();
+.charms {
+    display: block;
+    position: fixed;
+    z-index: @zindex-charms;
+    background-color: @dark;
+    color: @white;
+    transition: @transition-transform;
+    padding: 16px;
+}
 
-    .charm-closer {
-        position: absolute;
-        display: block;
-        padding: .5rem;
-        //height: 2rem;
-        //width: 2rem;
-        text-align: center;
-        vertical-align: middle;
-        font-size: 2rem;
-        font-weight: normal;
-        //padding: 0 0 .625rem 0;
-        z-index: 3;
-        outline: none;
-        cursor: pointer;
+.charms {
+    &.top-side {
+        bottom: 100%;
+        width: 100%;
+        left: 0;
 
-        color: @winFlatSystemButtonRestColor;
-        top: .25rem;
-        right: 1rem;
-
-        &:after {
-            content: '\D7';
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            margin-top: -.65rem;
-            margin-left: -.35rem;
+        &.open {
+            transform: translateY(100%);
         }
+    }
+    &.bottom-side {
+        top: 100%;
+        left: 0;
+        width: 100%;
 
-        &:hover {
-            color: @white;
+        &.open {
+            transform: translateY(-100%);
         }
+    }
+    &.left-side {
+        top: 0;
+        bottom: 0;
+        right: 100%;
+        width: auto;
 
-        &:active {
-            color: @white;
+        &.open {
+            transform: translateX(100%);
+        }
+    }
+    &.right-side {
+        top: 0;
+        bottom: 0;
+        width: auto;
+        left: 100%;
+
+        &.open {
+            transform: translateX(-100%);
         }
     }
 }
 
-.charm {
-	&.right-side {
-		width: auto;
-		right: 0;
-		top: 0;
-        left: auto;
-		bottom: 0;
-	}
-	&.left-side {
-		width: auto;
-		left: 0;
-		top: 0;
-		bottom: 0;
-	}
-	&.top-side {
-		height: auto;
-		left: 0;
-		right: 0;
-		top: 0;
-	}
-	&.bottom-side {
-		height: auto;
-		left: 0;
-		right: 0;
-        top: auto;
-		bottom: 0;
-	}
+.charm-tile, .charm-notify {
+    display: block;
+    position: relative;
+    cursor: pointer;
+}
+
+.charm-tile {
+    width: 90px;
+    height: 66px;
+    padding: 4px;
+    background-color: #50727C;
+    color: @white;
+    margin: 2px;
+    flex-shrink: 0;
+    flex-grow: 0;
+
+    .icon {
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 16px;
+        height: 16px;
+        font-size: 16px;
+    }
+
+    .caption {
+        margin-top: 30px;
+        font-size: 10px;
+        display: block;
+    }
+
+    &.active {
+        background-color: #126278;
+    }
+}
+
+.charm-notify {
+    height: auto;
+    background-color: #2D6070;
+    color: @white;
+    padding: 24px;
+
+    .icon {
+        position: absolute;
+        left: 16px;
+        top: 24px;
+        width: 48px;
+        height: 48px;
+        font-size: 40px;
+    }
+
+    .title, .content, .secondary {
+        display: block;
+        position: relative;
+        margin-left: 52px;
+        line-height: 1;
+    }
+
+    .title {
+        font-weight: bold;
+        margin-bottom: 6px;
+    }
+
+    .content {
+        font-size: 14px;
+        line-height: 1.2;
+    }
+
+    .secondary {
+        font-size: 10px;
+        margin-top: 8px;
+    }
+}
+
+* + .charm-notify {
+    margin-top: 4px;
 }

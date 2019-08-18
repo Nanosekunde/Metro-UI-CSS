@@ -2,52 +2,91 @@ module.exports = function(grunt) {
 
     "use strict";
 
+    var watching = grunt.option('watching');
+    var develop = grunt.option('develop');
+    var tasks = ['clean', 'less', 'postcss', 'concat'];
+    var watch_files = [
+        'js/i18n/*.json',
+        'js/*.js',
+        'js/utils/*.js',
+        'js/plugins/*js',
+        'less/*.less',
+        'less/include/*.less',
+        'less/third-party/*.less',
+        'less/schemes/*.less',
+        'less/schemes/builder/*.less',
+        'Gruntfile.js'
+    ];
+    var time = new Date(), day = time.getDate(), month = time.getMonth()+1, year = time.getFullYear(), hour = time.getHours(), mins = time.getMinutes(), sec = time.getSeconds();
+    var timestamp = (day < 10 ? "0"+day:day) + "/" + (month < 10 ? "0"+month:month) + "/" + (year) + " " + (hour<10?"0"+hour:hour) + ":" + (mins<10?"0"+mins:mins) + ":" + (sec<10?"0"+sec:sec);
+
+    require('time-grunt')(grunt);
     require('load-grunt-tasks')(grunt);
 
-    var autoprefixer = require('autoprefixer-core');
+    if (!develop) {
+        tasks.push('uglify');
+        tasks.push('cssmin');
+    }
+
+    tasks.push('replace');
+    tasks.push('copy');
+
+    if (watching) {
+        tasks.push('watch');
+    }
 
     grunt.initConfig({
+        docsDir: 'G:\\Projects\\Metro4-Docs\\public_html\\metro',
         pkg: grunt.file.readJSON('package.json'),
-        banner: '/*!\n' +
-                ' * Metro UI CSS v<%= pkg.version %> (<%= pkg.homepage %>)\n' +
-                ' * Copyright 2012-<%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
-                ' * Licensed under <%= pkg.license.type %> (<%= pkg.license.url %>)\n' +
-                ' */\n',
+        banner: '/*\n' +
+        ' * Metro 4 Components Library v<%= pkg.version %> <%= pkg.version_suffix %> (<%= pkg.homepage %>)\n' +
+        ' * Copyright 2012-<%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
+        ' * Licensed under <%= pkg.license %>\n' +
+        ' */\n',
 
         requirejs_banner: "\n(function( factory ) {\n"+
-                          "    if ( typeof define === 'function' && define.amd ) {\n" +
-                          "        define([ 'jquery' ], factory );\n"+
-                          "    } else {\n" +
-                          "        factory( jQuery );\n"+
-                          "    }\n"+
-                          "}(function( jQuery ) { \n'use strict';\n\nvar $ = jQuery;\n\nwindow.METRO_VERSION = '<%= pkg.version %>';\n\n",
+        "    if ( typeof define === 'function' && define.amd ) {\n" +
+        "        define([ 'jquery' ], factory );\n"+
+        "    } else {\n" +
+        "        factory( jQuery );\n"+
+        "    }\n"+
+        "}(function( jQuery ) { ",
 
         clean: {
-            build: ['build/js', 'build/css', 'build/fonts'],
-            docs: ['docs/css/metro*.css', 'docs/js/metro*.js'],
-            compiled_html: ['.compiled_html']
+            build: ['build/js', 'build/css', 'build/mif']
         },
 
         concat: {
-            options: {
-                banner: '<%= banner %>' + '<%= requirejs_banner%>',
-                footer: "\n\n return $.Metro.init();\n\n}));",
-                stripBanners: true,
-                process: function(src, filepath) {
-                    return '// Source: ' + filepath + '\n' +
-                        src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
-                }
-            },
-            metro: {
+            js: {
+                options: {
+                    banner: '<%= banner %>' + '<%= requirejs_banner%>',
+                    footer: "\n\nreturn METRO_INIT === true ? Metro.init() : Metro;\n\n}));",
+                    stripBanners: true,
+                    process: function(src, filepath) {
+                        return '\n// Source: ' + filepath + '\n\n' + src;
+                        // return '\n// Source: ' + filepath + '\n' + src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
+                        // return '\n// Source: ' + filepath + '\n' + src.replace(/(^|\n)[ \t]*();?\s*/g, '$1');
+                    }
+                },
                 src: [
-                    'js/requirements.js',
-                    'js/global.js',
-                    'js/widget.js',
-                    'js/initiator.js',
+                    'js/*.js',
                     'js/utils/*.js',
-                    'js/widgets/*.js'
+                    'js/plugins/*.js'
                 ],
-                dest: 'build/js/<%= pkg.name %>.js'
+                dest: 'build/js/metro.js'
+            },
+            css: {
+                options: {
+                    stripBanners: true,
+                    banner: '<%= banner %>'
+                },
+                src: [
+                    'build/css/metro.css',
+                    'build/css/metro-colors.css',
+                    'build/css/metro-rtl.css',
+                    'build/css/metro-icons.css'
+                ],
+                dest: 'build/css/metro-all.css'
             }
         },
 
@@ -55,124 +94,130 @@ module.exports = function(grunt) {
             options: {
                 banner: '<%= banner %>',
                 stripBanners: false,
-                sourceMap: false
+                sourceMap: true,
+                preserveComments: false
             },
-            metro: {
-                src: '<%= concat.metro.dest %>',
-                dest: 'build/js/<%= pkg.name %>.min.js'
+            core: {
+                src: 'build/js/metro.js',
+                dest: 'build/js/metro.min.js'
             }
         },
 
         less: {
             options: {
-                paths: ['less'],
-                strictMath: false
+                paths: "less/",
+                strictMath: false,
+                sourceMap: false,
+                banner: '<%= banner %>'
             },
-            compileCore: {
-                src: 'less/<%= pkg.name %>.less',
-                dest: 'build/css/<%= pkg.name %>.css'
+            src: {
+                expand: true,
+                cwd: "less/",
+                src: ["metro.less", "metro-rtl.less", "metro-colors.less", "metro-icons.less"],
+                ext: ".css",
+                dest: "build/css"
             },
-            compileResponsive: {
-                src: 'less/<%= pkg.name %>-responsive.less',
-                dest: 'build/css/<%= pkg.name %>-responsive.css'
+            schemes: {
+                expand: true,
+                cwd: "less/schemes/",
+                src: ["*.less"],
+                ext: ".css",
+                dest: "build/css/schemes"
             },
-            compileRtl: {
-                src: 'less/<%= pkg.name %>-rtl.less',
-                dest: 'build/css/<%= pkg.name %>-rtl.css'
+            third: {
+                expand: true,
+                cwd: "less/third-party/",
+                src: ["*.less"],
+                ext: ".css",
+                dest: "build/css/third-party"
             },
-            compileSchemes: {
-                src: 'less/<%= pkg.name %>-schemes.less',
-                dest: 'build/css/<%= pkg.name %>-schemes.css'
-            },
-            compileColors: {
-                src: 'less/<%= pkg.name %>-colors.less',
-                dest: 'build/css/<%= pkg.name %>-colors.css'
-            },
-            compileFont: {
-                src: 'less/<%= pkg.name %>-icons.less',
-                dest: 'build/css/<%= pkg.name %>-icons.css'
+            docs: {
+                expand: true,
+                cwd: "docs/css/",
+                src: ["*.less"],
+                ext: ".css",
+                dest: "docs/css"
             }
         },
 
         postcss: {
             options: {
+                map: false,
                 processors: [
-                    autoprefixer({ browsers: ['> 5%'] }).postcss
+                    require('autoprefixer')({
+                        overrideBrowserslist: ['last 2 versions']
+                    })
                 ]
             },
-            dist: { src: 'build/css/*.css' }
+            dist: {
+                src: 'build/css/*.css'
+            },
+            schemes: {
+                src: 'build/css/schemes/*.css'
+            },
+            third: {
+                src: 'build/css/third-party/*.css'
+            }
         },
 
         cssmin: {
-            minCore: {
-                src: 'build/css/<%= pkg.name %>.css',
-                dest: 'build/css/<%= pkg.name %>.min.css'
+            src: {
+                expand: true,
+                cwd: "build/css",
+                src: ['*.css', '!*.min.css'],
+                dest: "build/css",
+                ext: ".min.css"
             },
-            minRtl: {
-                src: 'build/css/<%= pkg.name %>-rtl.css',
-                dest: 'build/css/<%= pkg.name %>-rtl.min.css'
+            schemes: {
+                expand: true,
+                cwd: "build/css/schemes",
+                src: ['*.css', '!*.min.css'],
+                dest: "build/css/schemes",
+                ext: ".min.css"
             },
-            minResponsive: {
-                src: 'build/css/<%= pkg.name %>-responsive.css',
-                dest: 'build/css/<%= pkg.name %>-responsive.min.css'
-            },
-            minSchemes: {
-                src: 'build/css/<%= pkg.name %>-schemes.css',
-                dest: 'build/css/<%= pkg.name %>-schemes.min.css'
-            },
-            minColors: {
-                src: 'build/css/<%= pkg.name %>-colors.css',
-                dest: 'build/css/<%= pkg.name %>-colors.min.css'
-            },
-            minFont: {
-                src: 'build/css/<%= pkg.name %>-icons.css',
-                dest: 'build/css/<%= pkg.name %>-icons.min.css'
+            third: {
+                expand: true,
+                cwd: "build/css/third-party",
+                src: ['*.css', '!*.min.css'],
+                dest: "build/css/third-party",
+                ext: ".min.css"
             }
         },
 
         copy: {
-            build_font: {
-                src: 'fonts/*',
-                dest: 'build/',
-                expand: true
-            },            
-            docs_css_core: {
-                src: 'build/css/<%= pkg.name %>.css',
-                dest: 'docs/css/<%= pkg.name %>.css'
+            fonts: {
+                expand: true,
+                cwd: 'icons',
+                src: '**/*',
+                dest: 'build/mif'
             },
-            docs_css_rtl: {
-                src: 'build/css/<%= pkg.name %>-rtl.css',
-                dest: 'docs/css/<%= pkg.name %>-rtl.css'
-            },
-            docs_css_responsive: {
-                src: 'build/css/<%= pkg.name %>-responsive.css',
-                dest: 'docs/css/<%= pkg.name %>-responsive.css'
-            },
-            docs_css_schemes: {
-                src: 'build/css/<%= pkg.name %>-schemes.css',
-                dest: 'docs/css/<%= pkg.name %>-schemes.css'
-            },
-            docs_css_colors: {
-                src: 'build/css/<%= pkg.name %>-colors.css',
-                dest: 'docs/css/<%= pkg.name %>-colors.css'
-            },
-            docs_css_font: {
-                src: 'build/css/<%= pkg.name %>-icons.css',
-                dest: 'docs/css/<%= pkg.name %>-icons.css'
-            },
-            docs_js: {
-                src: 'build/js/<%= pkg.name %>.js',
-                dest: 'docs/js/<%= pkg.name %>.js'
+            docs: {
+                expand: true,
+                cwd: 'build',
+                src: '**/*',
+                dest: 'docs/metro'
             }
         },
 
         replace: {
-            dist: {
+            build: {
                 options: {
                     patterns: [
                         {
-                            match: 'adsense',
-                            replacement: '<%= grunt.file.read(".replace/google-adsense-block.txt") %>'
+                            match: 'build',
+                            replacement: "<%= pkg.build %>"
+                        },
+                        {
+                            match: 'version',
+                            replacement: "<%= pkg.version %>"
+                        },
+                        {
+                            match: 'status',
+                            replacement: "<%= pkg.version_suffix %>"
+                        },
+                        {
+                            match: 'compile',
+                            replacement: timestamp
                         }
                     ]
                 },
@@ -180,7 +225,12 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        src: ['docs/*.html'], dest: '.compiled_html/'
+                        src: ['build/js/*.js'], dest: 'build/js/'
+                    },
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['build/css/*.css'], dest: 'build/css/'
                     }
                 ]
             }
@@ -188,14 +238,12 @@ module.exports = function(grunt) {
 
         watch: {
             scripts: {
-                files: ['js/*.js', 'js/utils/*.js', 'js/widgets/*js'],
-                tasks: ['concat', 'uglify', 'less', 'postcss', 'cssmin', 'copy']
+                files: watch_files,
+                tasks: tasks
             }
         }
     });
 
-    grunt.registerTask('default', [
-        'clean', 'concat', 'uglify', 'less', 'postcss', 'cssmin', 'copy', 'replace', 'watch'
-    ]);
+    grunt.registerTask('default', tasks);
 
 };

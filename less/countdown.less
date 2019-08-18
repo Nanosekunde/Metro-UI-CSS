@@ -1,89 +1,91 @@
-@import (once) "vars";
-@import (once) "utils";
+@import (once) "include/vars";
+@import (once) "include/mixins";
 
 .countdown {
-	display: inline-block;
-	font-weight: 700;
-	font-size: 1rem;
-	margin: .1em 0 1.2em;
+    display: flex;
+    flex-flow: row nowrap;
+    position: relative;
+    width: 100%;
+    justify-content: center;
+    font-size: 1.5rem;
+}
 
-	.part {
-		display: inline-block;
-		position: relative;
+.countdown {
+    .part {
+        position: relative;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        padding: .5rem .5rem .5em;
+        flex-shrink: 0;
+        flex-grow: 0;
+    }
 
-		&.days, &.hours, &.minutes, &.seconds {
-			&:after {
-				position: absolute;
-				content: attr(data-day-text);
-				text-align: center;
-				top: 100%;
-				left: 0;
-				width: 100%;
-				font-size: .6em;
-				color: inherit;
-			}
-		}
+    .digit {
+        display: block;
+        position: relative;
+        padding: 0;
+        line-height: 1;
+        overflow: hidden;
 
-		&.disabled {
-			.digit {
-				opacity: .3;
-				box-shadow: none;
-			}
-		}
-	}
+        .digit-placeholder {
+            visibility: hidden;
+        }
 
-	.digit, .divider {
-		display: inline-block;
-		padding: .3125em .625em;
-		background-color: @cyan;
-		color: @white;
-		cursor: default;
-		.block-shadow;
-		.text-shadow;
-		.transition(.5s);
-	}
+        .digit-value {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            font: inherit;
+        }
+    }
 
-	.digit, .divider {
-		margin-left: 4px;
-	}
+    .part + .part::before {
+        top: 10px;
+        left: 0;
+        content: "";
+        display: block;
+        position: absolute;
+        height: ~"calc(100% - 8px)";
+        width: 1px;
+        background: radial-gradient(at left, @borderColor, transparent);
+    }
 
-	.divider {
-		padding: .125em .25em;
-		color: @dark;
-		background-color: transparent;
-		box-shadow: none;
-	}
+    .part.d-none + .part::before {
+        display: none;
+    }
 
-	&.tick {
-		.divider {
-			opacity: 0;
-		}
-	}
+    .part.no-divider {
+        &::before {
+            display: none;
+        }
+    }
 
-	&.labels-top {
-		margin: 1.2em 0 .1em;
+    .part {
+        &.days, &.hours, &.minutes, &.seconds {
+            &::after {
+                position: absolute;
+                content: attr(data-label);
+                text-align: center;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                font-size: .3em;
+                color: inherit;
+                background-color: inherit;
+                z-index: 1;
+            }
+        }
+    }
 
-		.part {
-			&.days, &.hours, &.minutes, &.seconds {
-				&:after {
-					top: 0;
-					left: 0;
-					margin-top: -1.5em;
-				}
-			}
-		}
-	}
+    .days {order: 1;}
+    .hours {order: 2;}
+    .minutes {order: 3;}
+    .seconds {order: 4;}
+}
 
-	&.rounded {
-		.part {
-			.digit {
-				border-radius: .5em;
-			}
-		}
-	}
-
-	.digit.scaleIn {
-		.transition(.5s);
-		.scale(1.1);
-	}
+.countdown {
+    &.blink {
+    }
 }

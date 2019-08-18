@@ -1,19 +1,5 @@
-// var template =
-//     'My skills:' +
-//     '<%if(this.showSkills) {%>' +
-//     '<%for(var index in this.skills) {%>' +
-//     '<a href="#"><%this.skills[index]%></a>' +
-//     '<%}%>' +
-//     '<%} else {%>' +
-//     '<p>none</p>' +
-//     '<%}%>';
-//     console.log(TemplateEngine(template, {
-//     skills: ["js", "html", "css"],
-//     showSkills: true
-// }));
-
-var TemplateEngine = function(html, options) {
-    var re = /<%(.+?)%>/g,
+var TemplateEngine = function(html, options, conf) {
+    var ReEx, re = '<%(.+?)%>',
         reExp = /(^( )?(var|if|for|else|switch|case|break|{|}|;))(.*)?/g,
         code = 'with(obj) { var r=[];\n',
         cursor = 0,
@@ -21,12 +7,26 @@ var TemplateEngine = function(html, options) {
         match;
     var add = function(line, js) {
         js? (code += line.match(reExp) ? line + '\n' : 'r.push(' + line + ');\n') :
-            (code += line != '' ? 'r.push("' + line.replace(/"/g, '\\"') + '");\n' : '');
+            (code += line !== '' ? 'r.push("' + line.replace(/"/g, '\\"') + '");\n' : '');
         return add;
     };
-    while(match = re.exec(html)) {
+
+    if (Utils.isValue(conf)) {
+        if ((conf.hasOwnProperty('beginToken'))) {
+            re = re.replace('<%', conf.beginToken);
+        }
+        if ((conf.hasOwnProperty('endToken'))) {
+            re = re.replace('%>', conf.endToken);
+        }
+    }
+
+    ReEx = new RegExp(re, 'g');
+    match = ReEx.exec(html);
+
+    while(match) {
         add(html.slice(cursor, match.index))(match[1], true);
         cursor = match.index + match[0].length;
+        match = ReEx.exec(html);
     }
     add(html.substr(cursor, html.length - cursor));
     code = (code + 'return r.join(""); }').replace(/[\r\t\n]/g, ' ');
@@ -35,6 +35,4 @@ var TemplateEngine = function(html, options) {
     return result;
 };
 
-window.metroTemplate = TemplateEngine;
-
-$.Template = TemplateEngine;
+Metro['template'] = TemplateEngine;

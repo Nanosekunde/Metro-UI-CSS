@@ -1,139 +1,102 @@
-@import (once) "vars";
-@import (once) "utils";
+@import (once) "include/vars";
+@import (once) "include/mixins";
 
-.dialog-overlay {
-	background-color: @transparent;
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	min-height: 100%;
-	min-width: 100%;
-	z-index: @zindexModal - 1;
+.dialog {
+    position: fixed;
+    display: flex;
+    flex-flow: column;
+    width: auto;
+    max-width: ~"calc(100vw - 100px)";
+    max-height: ~"calc(100vh - 100px)";
+    height: auto;
+    background-color: @white;
+    color: @dark;
+    z-index: @zindex-modal;
+    border: 1px solid @borderColor;
 }
 
 .dialog {
-	position: fixed;
-	display: block;
-	width: auto;
-	height: auto;
-	float: left;
-	background-color: @white;
-	color: @dark;
-	z-index: @zindexModal;
-
-    &.dialog-ex {
-        padding: .625rem;
+    &.shadow-on {
+        .shadow(3);
     }
+}
 
+.dialog-title, .dialog-content, .dialog-actions {
+    display: block;
+}
 
-	.block-shadow;
+.dialog-title {
+    font-size: 1.325rem;
+    padding: 12px 24px;
+    order: 1;
+    border-bottom: 1px solid @borderColor;
+}
 
-	.dialog-close-button {
-		position: absolute;
-		height: 1.5rem;
-		width: 1.5rem;
-		min-height: 1.5rem;
-		text-align: center;
-		vertical-align: middle;
-		font-size: 1rem;
-		font-weight: normal;
-		padding: .125rem 0 .625rem 0;
-		z-index: 3;
-		outline: none;
-		cursor: pointer;
+.dialog-content {
+    padding: 12px 24px;
+    order: 2;
+}
 
-		background-color: @winFlatBackgroundColor;
-		color: @winFlatSystemButtonRestColor;
-		top: .25rem;
-		right: .25rem;
+.dialog-actions {
+    border-top: 1px solid @winFlatBorderColor;
+    padding: 8px 16px;
+    order: 3;
 
-		&:hover {
-			background-color: @winFlatSystemButtonHoverBackground;
-			color: @winFlatSystemButtonActiveColor;
-			&:after {
-				border-color: @winFlatSystemButtonActiveColor;
-			}
-		}
-		&:active {
-			background-color: @winFlatSystemButtonActiveBackground;
-			color: @white;
-		}
-		&:after {
-			border-color: @winFlatSystemButtonRestColor;
-			content: '\D7';
-			line-height: 1;
-		}
-	}
+    & > * {
+        margin: 0 4px;
+        min-width: 64px;
+    }
+}
 
-	.dialog-title {
-		font-size: 1.125rem;
-	}
+.dialog {
+    * + .dialog-content {
+        margin-top: 8px;
+    }
+    * + .dialog-actions {
+        margin-top: 8px;
+    }
+}
 
-	.dialog-title + .dialog-content {
-		margin-top: 20px;
-	}
+.dialog {
+    .closer {
+        display: block;
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        background-color: inherit;
+        color: inherit;
+        z-index: 100;
+        &::before {
+            display: block;
+            content: "\00d7";
+            font-size: 24px;
+            margin-top: -4px;
+        }
+    }
+}
 
-	.dialog-actions {
-		position: relative;
-		display: block;
-		padding: 8px 0;
-		text-align: right;
-        margin-top: .625rem;
+.dialog {
+    each(@buttonPredefinedTypes, {
+        @color: "@{value}Color";
 
-		.button {
-			margin: 0 4px;
-			min-width: 64px;
-		}
-	}
+        &.@{value} {
+            border: 1px solid @@color;
 
-	&.success {
-		background-color: @green;
-        color: @white;
-		.dialog-close-button {
-			background-color: @lightGreen;
-			color: @white;
+            .dialog-title {
+                background-color: @@color;
+                border-bottom-color: @@color;
+                color: @white;
+            }
 
-			&:active {
-				background-color: @darkGreen;
-			}
-		}
-	}
-	&.warning {
-		background-color: @orange;
-        color: @white;
-		.dialog-close-button {
-			background-color: @lightOrange;
-			color: @white;
+            .dialog-actions {
+                border-top-color: @@color;
+            }
+        }
+    })
 
-			&:active {
-				background-color: @darkOrange;
-			}
-		}
-	}
-	&.alert {
-		background-color: @red;
-        color: @white;
-		.dialog-close-button {
-			background-color: @lightRed;
-			color: @white;
-
-			&:active {
-				background-color: @darkRed;
-			}
-		}
-	}
-	&.info {
-		background-color: @cyan;
-        color: @white;
-		.dialog-close-button {
-			background-color: @lightCyan;
-			color: @white;
-
-			&:active {
-				background-color: @darkCyan;
-			}
-		}
-	}
+    &.light, &.yellow {
+        .dialog-title {
+            color: @dark;
+        }
+    }
 }
